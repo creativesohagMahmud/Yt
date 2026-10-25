@@ -26,8 +26,11 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: 📱 Setup Android SDK Tools
-        uses: android-actions/setup-android@v3
+      - name: 📱 Accept SDK Licenses & Install Android Packages
+        run: |
+          SDKMANAGER=$(command -v sdkmanager || echo "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager")
+          yes | "$SDKMANAGER" --licenses > /dev/null 2>&1 || true
+          "$SDKMANAGER" "platforms;android-34" "build-tools;34.0.0" "platform-tools" || true
 
       - name: 🐘 Setup Gradle
         uses: gradle/actions/setup-gradle@v4
